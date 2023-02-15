@@ -29,6 +29,11 @@ function setup() {
             tiles.push(tile);
         }
     }
+    // Creating blank tile
+    tiles.pop();
+    board.pop();
+    board.push(-1);
+
     simpleShuffle(board);
 }
 
@@ -53,8 +58,10 @@ function draw() {
             let x = col * w;
             let y = row * h;
             let tileIndex = board[index];
-            let img = tiles[tileIndex].img;
-            image(img, x, y, w, h);
+            if (tileIndex > -1) {               // running for all tiles except the blank. Increase the value here to create more blank tiles
+                let img = tiles[tileIndex].img;
+                image(img, x, y, w, h);
+            }
         }
     }
 
