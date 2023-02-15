@@ -4,6 +4,7 @@ let cols = 4;
 let rows = 4;
 let w,h;
 let board = [];
+const reshuffle = document.querySelector('#reshuffle');
 
 function preload() {
     source = loadImage("imgtest-square.jpg");
@@ -11,6 +12,7 @@ function preload() {
 
 function setup() {
     createCanvas(400, 400);
+    frameRate(10);      // for displaying grid moves
     w = width / cols;   //todo: where is width defined?
     h = height / rows;  //todo: where is height defined?
     
@@ -35,9 +37,12 @@ function setup() {
     board.push(-1);
 
     randomMove(board);
+    // noLoop();
 }
 
 function draw() {
+    randomMove(board);
+    background(0);
     for (let col = 0; col < cols; col++) {
         for (let row = 0; row < rows; row++) {
             let index = col + row * cols;
@@ -50,7 +55,7 @@ function draw() {
             }
         }
     }
-
+    // drawing gridlines
     for(let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
             let x = i * w;
@@ -60,9 +65,26 @@ function draw() {
             rect(x, y, w, h);
         }
     }
+    console.log(tiles[0].img);
+}
 
+// Stop shuffling after set time
+setTimeout(stopShuffling, 5000);
+function stopShuffling() {
     noLoop();
 }
+
+// Reshuffle on keypress
+window.addEventListener('keydown', function(e) {
+    e.key === 'r' ? loop() : false;
+    setTimeout(stopShuffling, 5000);
+})
+
+// Reshuffle on button press
+reshuffle.addEventListener('click', function() {
+    loop();
+    setTimeout(stopShuffling, 5000);
+})
 
 function move(i, j, arr) {
     let blank = findBlank();
@@ -71,6 +93,13 @@ function move(i, j, arr) {
     if (isNeighbor(i,j,blankCol,blankRow)) {
         swap(blank, i + j * cols, arr)
     }
+}
+
+function swap(i, j, arr) {
+    let temp = arr[i];
+    arr[i] = arr[j];
+    arr[i];
+    arr[j] = temp;
 }
 
 function isNeighbor(i,j,x,y) {
@@ -90,15 +119,9 @@ function findBlank() {
 }
 
 function randomMove(arr) {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10; i++) {   // higher value = more randomised
         let r1 = floor(random(cols));
         let r2 = floor(random(rows));
         move(r1, r2, arr);
     }
-}
-
-function swap(i, j, arr) {
-    let temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
 }
