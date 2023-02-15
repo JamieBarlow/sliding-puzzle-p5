@@ -34,21 +34,7 @@ function setup() {
     board.pop();
     board.push(-1);
 
-    simpleShuffle(board);
-}
-
-function simpleShuffle(arr) {
-    for (let i = 0; i < 100; i++) {
-        let r1 = floor(random(0, arr.length));
-        let r2 = floor(random(0, arr.length));
-        swap(r1, r2, arr);
-    }
-}
-
-function swap(i, j, arr) {
-    let temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+    randomMove(board);
 }
 
 function draw() {
@@ -78,3 +64,41 @@ function draw() {
     noLoop();
 }
 
+function move(i, j, arr) {
+    let blank = findBlank();
+    let blankCol = blank % cols;    // col no's start at 0 so modulo used to find remainder
+    let blankRow = floor(blank / rows);
+    if (isNeighbor(i,j,blankCol,blankRow)) {
+        swap(blank, i + j * cols, arr)
+    }
+}
+
+function isNeighbor(i,j,x,y) {
+    if (i !== x && j !== y) {    // if tiles compared are not in the same column or row, can't be neighbours
+        return false;
+    }
+    if (abs(i-x) == 1 || abs(j-y) == 1) {   // if tiles compared are 1 row or column apart (and also in the same row or column, as per above)
+        return true;
+    }
+    return false;
+}
+
+function findBlank() {
+    for (let i = 0; i < board.length; i++) {
+        if (board[i] == -1) return i;        // gives index of blank tile
+    }
+}
+
+function randomMove(arr) {
+    for (let i = 0; i < 100; i++) {
+        let r1 = floor(random(cols));
+        let r2 = floor(random(rows));
+        move(r1, r2, arr);
+    }
+}
+
+function swap(i, j, arr) {
+    let temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
