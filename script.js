@@ -6,6 +6,7 @@ let w,h;
 let board = [];
 const reshuffle = document.querySelector('#reshuffle');
 firstTime = true;
+randomization = 10;
 
 function preload() {
     source = loadImage("imgtest-square.jpg");
@@ -95,7 +96,8 @@ window.addEventListener('keydown', function(e) {
 
 // Reshuffle on button press
 reshuffle.addEventListener('click', function() {
-    loop();
+    firstTime = true;
+    redraw(randomization);
     setTimeout(stopShuffling, 5000);
 })
 
@@ -132,7 +134,7 @@ function findBlank() {
 }
 
 function randomMove(arr) {
-    for (let i = 0; i < 10; i++) {   // higher value = more randomised
+    for (let i = 0; i < randomization; i++) {   // higher value = more randomised
         let r1 = floor(random(cols));
         let r2 = floor(random(rows));
         move(r1, r2, arr);
