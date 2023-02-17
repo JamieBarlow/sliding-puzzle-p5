@@ -5,6 +5,7 @@ let rows = 4;
 let w,h;
 let board = [];
 const reshuffle = document.querySelector('#reshuffle');
+firstTime = true;
 
 function preload() {
     source = loadImage("imgtest-square.jpg");
@@ -36,12 +37,23 @@ function setup() {
     board.pop();
     board.push(-1);
 
-    randomMove(board);
-    // noLoop();
+    // randomMove(board);
+    // setTimeout(stopShuffling, 5000);
 }
 
+function mousePressed() {
+    let col = floor(mouseX / w);
+    let row = floor(mouseY / h);
+    // console.log(col, row);
+    move(col,row,board);
+}
+
+
 function draw() {
-    randomMove(board);
+    if (firstTime === true) {
+        randomMove(board);    // comment out to remove shuffling - for testing
+    }  
+    setTimeout(stopShuffling, 5000);
     background(0);
     for (let col = 0; col < cols; col++) {
         for (let row = 0; row < rows; row++) {
@@ -66,18 +78,19 @@ function draw() {
         }
     }
     console.log(tiles[0].img);
+   
+    // noLoop();
 }
 
-// Stop shuffling after set time
-setTimeout(stopShuffling, 5000);
 function stopShuffling() {
-    noLoop();
+    firstTime = false;
+    // noLoop();
 }
 
 // Reshuffle on keypress
-window.addEventListener('keydown', function(e) {
+window.addEventListener('keydown', function(e) {    
     e.key === 'r' ? loop() : false;
-    setTimeout(stopShuffling, 5000);
+    setTimeout(stopShuffling, 5000);                    // Stop shuffling after set time
 })
 
 // Reshuffle on button press
